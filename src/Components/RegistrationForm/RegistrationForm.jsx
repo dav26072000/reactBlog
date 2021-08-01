@@ -8,12 +8,30 @@ import handleRegistrationSubmit from "../../handlers/handleRegistrationSubmit";
 import Popup from "../Popup/Popup";
 
 export default function RegistrationForm() {
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState({
+    isPopup: false,
+    massage: "",
+    isError: false,
+  });
+  const [registeredUsers, setRegisteredUsers] = useState([]);
 
+  // get users block in local storage
   useEffect(() => {
-    if (showPopup === true) {
+    const users = localStorage.getItem("users");
+
+    if (users) {
+      setRegisteredUsers(JSON.parse(users));
+    }
+  }, []);
+  console.log(showPopup.isPopup);
+  //   useEffect(() => {
+  //     localStorage.setItem("users", JSON.stringify(registeredUsers));
+  //   });
+  //   close popup after 3 seconds
+  useEffect(() => {
+    if (showPopup.isPopup === true) {
       const timer = setTimeout(() => {
-        setShowPopup((prev) => !prev);
+        setShowPopup({ isPopup: false });
       }, 3000);
       return () => clearTimeout(timer);
     }
@@ -21,8 +39,8 @@ export default function RegistrationForm() {
 
   return (
     <>
-      {showPopup ? (
-        <Popup message="You registered successfully" isError={false} />
+      {showPopup.isPopup ? (
+        <Popup message={showPopup.massage} isError={showPopup.isError} />
       ) : null}
       <Formik
         initialValues={{
@@ -34,7 +52,7 @@ export default function RegistrationForm() {
         }}
         validationSchema={registrationScheme}
         onSubmit={(formData, { resetForm }) => {
-          handleRegistrationSubmit(formData, setShowPopup);
+          handleRegistrationSubmit(formData, setShowPopup, registeredUsers);
           resetForm();
         }}
       >

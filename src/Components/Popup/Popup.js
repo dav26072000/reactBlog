@@ -4,7 +4,7 @@ const classNames = require("classnames");
 
 export default function Popup({ message, isError }) {
   const popupStyle = classNames({
-    "flex flex-col p-8 shadow-md hover:shodow-lg rounded-2xl absolute top-20 right-0": true,
+    "flex flex-col p-8 shadow-md hover:shodow-lg rounded-2xl fixed top-20 right-3": true,
     "bg-green-400": !isError,
     "bg-red-400": isError,
   });
