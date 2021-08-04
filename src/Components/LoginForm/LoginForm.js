@@ -1,19 +1,23 @@
 /* eslint-disable consistent-return */
 import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
-import { registrationScheme } from "../../validationSchemes/registrationScheme";
+import { useHistory } from "react-router-dom";
+import { loginScheme } from "../../validationSchemes/loginScheme";
 import ButtonComponent from "../ButtonComponent/ButtonComponent";
 import TextField from "../TextField/TextField";
-import handleRegistrationSubmit from "../../handlers/handleRegistrationSubmit";
+import handleLoginSubmit from "../../handlers/handleLoginSubmit";
 import Popup from "../Popup/Popup";
 
-export default function RegistrationForm() {
+export default function LoginForm() {
   const [showPopup, setShowPopup] = useState({
     isPopup: false,
     massage: "",
     isError: false,
   });
   const [registeredUsers, setRegisteredUsers] = useState([]);
+
+  // User page history
+  const history = useHistory();
 
   // get users block in local storage
   useEffect(() => {
@@ -23,12 +27,11 @@ export default function RegistrationForm() {
       setRegisteredUsers(JSON.parse(users));
     }
   }, []);
-
-  //   useEffect(() => {
-  //     localStorage.setItem("users", JSON.stringify(registeredUsers));
-  //   });
-
-  //   Close popup after some time
+  //   console.log(showPopup.isPopup);
+  //   //   useEffect(() => {
+  //   //     localStorage.setItem("users", JSON.stringify(registeredUsers));
+  //   //   });
+  //   //   close popup after 3 seconds
   useEffect(() => {
     if (showPopup.isPopup === true) {
       const timer = setTimeout(() => {
@@ -45,33 +48,18 @@ export default function RegistrationForm() {
       ) : null}
       <Formik
         initialValues={{
-          firstName: "",
-          lastName: "",
           email: "",
           password: "",
-          confirmPassword: "",
         }}
-        validationSchema={registrationScheme}
+        validationSchema={loginScheme}
         onSubmit={(formData, { resetForm }) => {
-          handleRegistrationSubmit(formData, setShowPopup, registeredUsers);
+          handleLoginSubmit(formData, setShowPopup, registeredUsers, history);
           resetForm();
         }}
       >
         {() => (
           <div className="App max-w-full flex align-center justify-center">
             <Form className="w-1/3">
-              <TextField
-                name="firstName"
-                labelText="First Name"
-                type="text"
-                className="w-1/2"
-              />
-              <TextField
-                name="lastName"
-                labelText="Last Name"
-                type="text"
-                className="w-1/2"
-              />
               <TextField
                 name="email"
                 labelText="Email"
@@ -84,17 +72,10 @@ export default function RegistrationForm() {
                 type="password"
                 className="w-1/2"
               />
-              <TextField
-                name="confirmPassword"
-                labelText="Confirm Password"
-                type="password"
-                className="w-1/2"
-              />
-
               <ButtonComponent
                 type="submit"
                 className="mt-10 w-64 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                buttonName="Submit"
+                buttonName="Login"
               />
             </Form>
           </div>
