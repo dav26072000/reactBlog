@@ -8,11 +8,23 @@ export default function handlePostSubmit(
   console.log(loginedUserId);
   console.log(posts);
 
+  const dateObj = new Date();
+  const month = dateObj.getUTCMonth() + 1; // months from 1-12
+  const day = dateObj.getUTCDate();
+  const year = dateObj.getUTCFullYear();
+
+  const newdate = `${year}/${month}/${day}`;
+
   if (postTitle !== "" && postDescription !== "") {
     const postId = posts.length + 1;
     const setPost = {
       id: loginedUserId,
-      post: { title: postTitle, description: postDescription, id: postId },
+      post: {
+        title: postTitle,
+        description: postDescription,
+        id: postId,
+        date: newdate,
+      },
     };
     const setPostInStorage = Promise.resolve()
       .then(() => {

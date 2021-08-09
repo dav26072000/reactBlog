@@ -126,19 +126,22 @@ export default function UserProfile() {
           </div>
         </div>
       </div>
-      <div className="flex justify-center items-center flex-col">
+      <ul className="flex justify-center items-center flex-col">
         {userPost.map((elem) => {
+          // console.log(elem.post.id);
           if (elem.id === loginedUser.id) {
             return (
               <UserPostsComponent
                 title={elem.post.title}
                 description={elem.post.description}
+                date={elem.post.date}
+                key={elem.post.id}
               />
             );
           }
           return false;
         })}
-      </div>
+      </ul>
     </>
   );
 }

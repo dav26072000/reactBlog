@@ -29,6 +29,11 @@ export default function handleRegistrationSubmit(
         });
       })
       .then(() => {
+        if (!localStorage.getItem("posts")) {
+          localStorage.setItem("posts", JSON.stringify([]));
+        }
+      })
+      .then(() => {
         historyHook.push("/user");
       });
     return true;
